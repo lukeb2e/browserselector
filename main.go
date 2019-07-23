@@ -56,18 +56,42 @@ func main() {
 	})
 
 	// Get OS Arguments
-	args := os.Args[1]
+	args := os.Args
 	debug(config.Debug, "Arguments:", args)
+
+	var uri string
+	if len(args) > 1 {
+		for index, element := range args {
+			debug(config.Debug, "Element:", index, element)
+			start, err := regexp.Compile("(http|https|ftp|ftps|ftpes).*")
+			if err != nil {
+				fmt.Println(err)
+				fmt.Scanln()
+				os.Exit(1)
+			}
+			if start.MatchString(element) {
+				uri = args[index]
+				break
+			}
+		}
+	}
+
+	if uri == "" {
+		fmt.Println("Missing URL")
+		os.Exit(1)
+	}
+
+	debug(config.Debug, "URI: ", uri)
 
 	// Regex match FQDN
 	// https?:\/\/([^\/]*)\/?.*
-	r, err := regexp.Compile("https?://([^/]*)/?.*")
+	r, err := regexp.Compile("(http|https|ftp|ftps|ftpes)://([^/]*)/?.*")
 	if err != nil {
 		fmt.Println(err)
 		fmt.Scanln()
 		os.Exit(1)
 	}
-	fqdn := r.FindStringSubmatch(args)[1]
+	fqdn := r.FindStringSubmatch(uri)[2]
 	debug(config.Debug, "FQDN: ", fqdn)
 
 	// iterate over config
@@ -76,14 +100,14 @@ func main() {
 		match, _ := regexp.MatchString(element.Regex, fqdn)
 		if match {
 			selector = index
-			debug(config.Debug, "Match found")
+			debug(config.Debug, "Match found", element.Browser, "Priority:", element.Priority, "Regex:", element.Regex)
 			break
 		}
 	}
 
 	// Select correct browser
 	// Start browser
-	cmd := exec.Command(config.Domain[selector].Browser, args)
+	cmd := exec.Command(config.Domain[selector].Browser, fqdn)
 	err = cmd.Start()
 	if err != nil {
 		fmt.Println(err)
