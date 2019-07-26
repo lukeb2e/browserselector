@@ -1,0 +1,38 @@
+Windows Registry Editor Version 5.00
+
+; Infamous capabilities:
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Browserselector\Capabilities]
+"ApplicationDescription"="Browserselector"
+"ApplicationIcon"="C:\\tools\\browserselector\\browserselector.exe,0"
+"ApplicationName"="Browserselector"
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Browserselector\Capabilities\FileAssociations]
+".htm"="BrowserselectorURL"
+".html"="BrowserselectorURL"
+".shtml"="BrowserselectorURL"
+".xht"="BrowserselectorURL"
+".xhtml"="BrowserselectorURL"
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Browserselector\Capabilities\URLAssociations]
+"ftp"="BrowserselectorURL"
+"http"="BrowserselectorURL"
+"https"="BrowserselectorURL"
+
+; Register to Default Programs
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\RegisteredApplications]
+"Browserselector"="Software\\Browserselector\\Capabilities"
+
+; BrowserselectorURL HANDLER:
+
+[HKEY_LOCAL_MACHINE\Software\Classes\BrowserselectorURL]
+@="Browserselector Document"
+"FriendlyTypeName"="Browserselector Document"
+
+[HKEY_LOCAL_MACHINE\Software\Classes\BrowserselectorURL\shell]
+
+[HKEY_LOCAL_MACHINE\Software\Classes\BrowserselectorURL\shell\open]
+
+[HKEY_LOCAL_MACHINE\Software\Classes\BrowserselectorURL\shell\open\command]
+@="\"C:\\tools\\browserserlector\" -- \"%1\""
