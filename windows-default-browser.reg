@@ -36,3 +36,28 @@ Windows Registry Editor Version 5.00
 
 [HKEY_LOCAL_MACHINE\Software\Classes\BrowserselectorURL\shell\open\command]
 @="\"C:\\tools\\browserserlector\" -- \"%1\""
+
+; https://docs.microsoft.com/en-us/windows/win32/shell/default-programs
+; TODO FIX
+; alles als HKEY_CURRENT_USER
+HKEY_LOCAL_MACHINE
+   SOFTWARE
+      Contoso
+         WebBrowser
+            Capabilities
+               ApplicationDescription = This award-winning Contoso browser is better than ever. Search the Internet and find exactly what you want in just seconds. Use integrated tabs and new phishing detectors to enhance your Internet experience.
+               FileAssociations
+                  .htm = ContosoHTML
+                  .html = ContosoHTML
+                  .shtml = ContosoHTML
+                  .xht = ContosoHTML
+                  .xhtml = ContosoHTML
+               Startmenu
+                  StartmenuInternet = Contoso.exe
+               UrlAssociations
+                  http = Contoso.Url.Http
+                  https = Contoso.Url.Https
+                  ftp = Contoso.Url.ftp
+   SOFTWARE
+      RegisteredApplications
+         Contoso.WebBrowser.1.06 = SOFTWARE\Contoso\WebBrowser\Capabilities

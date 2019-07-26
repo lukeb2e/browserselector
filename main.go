@@ -31,14 +31,17 @@ func debug(debug bool, a ...interface{}) (n int, err error) {
 
 func main() {
 	// Check if config file exists
-	if _, err := os.Stat("config.yml"); os.IsNotExist(err) {
-		fmt.Println("Configuration file does not exist.")
-		os.Exit(1)
-	}
+	/*
+		if _, err := os.Stat("config.yml"); os.IsNotExist(err) {
+			fmt.Println("Configuration file does not exist.")
+			os.Exit(1)
+		}
+	*/
 
 	// Load config
 	var config configuration
-	viper.AddConfigPath(".")
+	viper.AddConfigPath("$HOME")
+	viper.SetConfigName("browserselector")
 	err := viper.ReadInConfig()
 	if err != nil {
 		fmt.Println(err)
