@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"regexp"
 	"sort"
 
@@ -30,19 +31,19 @@ func debug(debug bool, a ...interface{}) (n int, err error) {
 }
 
 func main() {
-	// Check if config file exists
-	/*
-		if _, err := os.Stat("config.yml"); os.IsNotExist(err) {
-			fmt.Println("Configuration file does not exist.")
-			os.Exit(1)
-		}
-	*/
+	// Get location of running binary
+	dir, err := filepath.Abs(filepath.Dir(os.Args[0]))
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 
 	// Load config
 	var config configuration
-	viper.AddConfigPath("$HOME")
-	viper.SetConfigName("browserselector")
-	err := viper.ReadInConfig()
+	viper.AddConfigPath(".")
+	viper.AddConfigPath(dir)
+	viper.SetConfigName("config")
+	err = viper.ReadInConfig()
 	if err != nil {
 		fmt.Println(err)
 		return
