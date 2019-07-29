@@ -44,9 +44,9 @@ IE.Visible = True
 While IE.Busy
     Wscript.Sleep 100
 Wend
-While IE.Document.ReadyState <> "complete" '(obsolete?) Or IE.ReadyState <> 4
-    Wscript.Sleep 100
-Wend
+'While IE.Document.ReadyState <> "complete" '(obsolete?) Or IE.ReadyState <> 4
+'    Wscript.Sleep 100
+'Wend
 
 sTitle = ""
 intWExist = FindIE( strMyUrl, oIE) ' look for MSIE window title
