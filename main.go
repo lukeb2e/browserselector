@@ -24,7 +24,7 @@ type domain struct {
 }
 
 type browser struct {
-	Exe    string
+	Exec   string
 	Script string
 }
 
@@ -123,19 +123,28 @@ func main() {
 	}
 
 	// Start browser
-	var cmd *exec.Cmd
+	var command = config.Browser[config.Domain[selector].Browser].Exec
+	var cmdArgs []string
 	if config.Browser[config.Domain[selector].Browser].Script == "" {
 		// Exe + "FQDN"
-		cmd = exec.Command(config.Browser[config.Domain[selector].Browser].Exe, "\""+fqdn+"\"")
+		//cmdArgs = append(cmdArgs, "\""+uri+"\"")
+		cmdArgs = append(cmdArgs, uri)
 	} else {
 		// Exe + Script + "FQDN"
-		cmd = exec.Command(config.Browser[config.Domain[selector].Browser].Exe, config.Browser[config.Domain[selector].Browser].Script, "\""+fqdn+"\"")
+		cmdArgs = append(cmdArgs, config.Browser[config.Domain[selector].Browser].Script, "\""+uri+"\"")
 	}
 
+	fmt.Println(command, cmdArgs)
+	cmd := exec.Command(command, cmdArgs...)
 	err = cmd.Start()
 	if err != nil {
 		fmt.Println(err)
 		fmt.Scanln()
 		os.Exit(1)
+	}
+
+	if config.Debug {
+		fmt.Println()
+		fmt.Scanln()
 	}
 }
