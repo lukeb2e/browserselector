@@ -12,14 +12,20 @@ import (
 )
 
 type configuration struct {
-	Domain []browser
-	Debug  bool
+	Domain  []domain
+	Browser map[string]*browser
+	Debug   bool
 }
 
-type browser struct {
+type domain struct {
 	Browser  string
 	Regex    string
 	Priority uint
+}
+
+type browser struct {
+	Exe    string
+	Script string
 }
 
 func debug(debug bool, a ...interface{}) (n int, err error) {
@@ -109,9 +115,23 @@ func main() {
 		}
 	}
 
-	// Select correct browser
+	// Check if browser exists
+	if _, ok := config.Browser[config.Domain[selector].Browser]; !ok {
+		fmt.Println("Browser not found in configuration")
+		fmt.Scanln()
+		os.Exit(1)
+	}
+
 	// Start browser
-	cmd := exec.Command(config.Domain[selector].Browser, fqdn)
+	var cmd *exec.Cmd
+	if config.Browser[config.Domain[selector].Browser].Script == "" {
+		// Exe + "FQDN"
+		cmd = exec.Command(config.Browser[config.Domain[selector].Browser].Exe, "\""+fqdn+"\"")
+	} else {
+		// Exe + Script + "FQDN"
+		cmd = exec.Command(config.Browser[config.Domain[selector].Browser].Exe, config.Browser[config.Domain[selector].Browser].Script, "\""+fqdn+"\"")
+	}
+
 	err = cmd.Start()
 	if err != nil {
 		fmt.Println(err)
