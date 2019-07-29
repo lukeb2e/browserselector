@@ -11,6 +11,7 @@ Windows Registry Editor Version 5.00
 
 [HKEY_CURRENT_USER\Software\Classes\BrowserselectorURL\shell\open]
 
+; PATH NEEDS TO BE EDITED HERE
 [HKEY_CURRENT_USER\Software\Classes\BrowserselectorURL\shell\open\command]
 @="\"C:\\tools\\browserselector\\browserselector.exe\" -- \"%1\""
 

@@ -25,3 +25,12 @@ domain:
 debug: true # optional
 ```
 
+## Installation
+
+The attached Registry file can be used to configure the tool as the default browser. The path to the binary has to be updated depending on your installation.
+
+```
+; PATH NEEDS TO BE EDITED HERE
+[HKEY_CURRENT_USER\Software\Classes\BrowserselectorURL\shell\open\command]
+@="\"C:\\tools\\browserselector\\browserselector.exe\" -- \"%1\""
+```
