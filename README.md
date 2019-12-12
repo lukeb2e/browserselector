@@ -34,3 +34,8 @@ The attached Registry file can be used to configure the tool as the default brow
 [HKEY_CURRENT_USER\Software\Classes\BrowserselectorURL\shell\open\command]
 @="\"C:\\tools\\browserselector\\browserselector.exe\" -- \"%1\""
 ```
+
+For Windows 10 the configuration changed. New .reg file is still work in progress. If you want to figure it out yourself the way Firefox registers itself seems to be documented here:
+
+`https://github.com/mozilla/gecko-dev/blob/master/browser/installer/windows/nsis/shared.nsh#L1456`
+
