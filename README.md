@@ -21,6 +21,9 @@ browser: # define possible browsers
   iexplore: # call iexplorer with helper script to open new tab instead of new window
     exe: "C:/Windows/System32/WindowsPowerShell/v1.0/powershell.exe"
     script: "C:/tools/browserselector/iexplore.ps1"
+  edge: # call edge with helper script
+    exe: "C:/Windows/System32/WindowsPowerShell/v1.0/powershell.exe"
+    script: "C:/tools/browserselector/edge.ps1"
   firefox:
     exe: "C:/Program Files/Mozilla Firefox/firefox.exe"
 
@@ -28,8 +31,11 @@ domain:
    - browser: "firefox" # name of browser
      regex: ".*"        # regex to match domain
      priority: 999      # priority - rules will be evaluated from lowest to highest
-   - browser: "iexplore"
+   - browser: "edge"
      regex: ".*\\.corpintra\\.net"
+     priority: 100
+   - browser: "firefox"
+     regex: ""
      priority: 10
 
 debug: true # optional
