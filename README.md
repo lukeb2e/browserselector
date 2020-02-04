@@ -2,6 +2,16 @@
 
 This tool can be configured as the default browser and switch to the correct browser depending on the FQDN. This is supposed to help in environments where you need to open certain tools in a specific browser.
 
+## Build
+
+To build this tool you require the tool goversioninfo.
+
+```
+go get github.com/josephspurrier/goversioninfo/cmd/goversioninfo
+go generate
+go build
+```
+
 ## Config
 
 You need to configure a `config.yml` file directly next to the browserselector.
