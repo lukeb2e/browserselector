@@ -19,10 +19,10 @@ You need to configure a `config.yml` file directly next to the browserselector.
 ```yaml
 browser: # define possible browsers
   iexplore: # call iexplorer with helper script to open new tab instead of new window
-    exe: "C:/Windows/System32/WindowsPowerShell/v1.0/powershell.exe"
+    exec: "C:/Windows/System32/WindowsPowerShell/v1.0/powershell.exe"
     script: "C:/tools/browserselector/iexplore.ps1"
   edge: # call edge with helper script
-    exe: "C:/Windows/System32/WindowsPowerShell/v1.0/powershell.exe"
+    exec: "C:/Windows/System32/WindowsPowerShell/v1.0/powershell.exe"
     script: "C:/tools/browserselector/edge.ps1"
   firefox:
     exe: "C:/Program Files/Mozilla Firefox/firefox.exe"
