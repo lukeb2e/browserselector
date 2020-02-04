@@ -1,0 +1,61 @@
+Windows Registry Editor Version 5.00
+
+; Register Client
+[HKEY_CURRENT_USER\Software\Clients\StartMenuInternet\Browserselector]
+
+[HKEY_CURRENT_USER\Software\Clients\StartMenuInternet\Browserselector\shell]
+@='open'
+
+[HKEY_CURRENT_USER\Software\Clients\StartMenuInternet\Browserselector\shell\open]
+
+; PATH NEEDS TO BE EDITED HERE
+[HKEY_CURRENT_USER\Software\Clients\StartMenuInternet\Browserselector\shell\open\command]
+@='"C:\tools\browserselector\browserselector.exe" -- "%1"'
+
+; PATH NEEDS TO BE EDITED HERE
+[HKEY_CURRENT_USER\SOFTWARE\Clients\StartMenuInternet\Browserselector\DefaultIcon]
+@='"C:\tools\browserselector\browserselector.exe",0'
+
+[HKEY_CURRENT_USER\Software\Clients\StartMenuInternet\Browserselector\Capabilities]
+'ApplicationDescription'='Browserselector'
+'ApplicationName'='Browserselector'
+
+[HKEY_CURRENT_USER\Software\Clients\StartMenuInternet\Browserselector\Capabilities\FileAssociations]
+'.htm'='BrowserselectorURL'
+'.html'='BrowserselectorURL'
+'.shtml'='BrowserselectorURL'
+'.svg'='BrowserselectorURL'
+'.webp'='BrowserselectorURL'
+'.xht'='BrowserselectorURL'
+'.xhtml'='BrowserselectorURL'
+
+[HKEY_CURRENT_USER\Software\Clients\StartMenuInternet\Browserselector\Capabilities\URLAssociations]
+'ftp'='BrowserselectorURL'
+'http'='BrowserselectorURL'
+'https'='BrowserselectorURL'
+
+[HKEY_CURRENT_USER\Software\Clients\StartMenuInternet\Browserselector\Capabilities\StartMenu]
+'StartMenuInternet'='BrowserselectorURL'
+
+; Register URL handler
+[HKEY_CURRENT_USER\Software\Classes\BrowserselectorURL]
+@='Browserselector URL'
+'URL Protocol'=''
+'EditFlags'='0x2'
+
+[HKEY_CURRENT_USER\Software\Classes\BrowserselectorURL\shell]
+@='open'
+
+; PATH NEEDS TO BE EDITED HERE
+[HKEY_CURRENT_USER\Software\Classes\BrowserselectorURL\shell\open\command]
+@='"C:\tools\browserselector\browserselector.exe" -- "%1"'
+
+[HKEY_CURRENT_USER\Software\Classes\BrowserselectorURL\shell\open\ddeexec]
+
+; Register to default programs
+[HKEY_CURRENT_USER\Software\RegisteredApplications]
+'Browserselector'='Software\Clients\StartMenuInternet\Browserselector\Capabilities'
+
+; To remove
+; HKEY_CURRENT_USER\Software\Clients\StartMenuInternet\Browserselector
+; HKEY_CURRENT_USER\Software\Classes\BrowserselectorURL
