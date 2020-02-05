@@ -20,10 +20,10 @@ You need to configure a `config.yml` file directly next to the browserselector.
 browser: # define possible browsers
   iexplore: # call iexplorer with helper script to open new tab instead of new window
     exec: "C:/Windows/System32/WindowsPowerShell/v1.0/powershell.exe"
-    script: "C:/tools/browserselector/iexplore.ps1"
+    script: "C:/tools/browserselector/iexplore.ps1" # see scripts folder
   edge: # call edge with helper script
     exec: "C:/Windows/System32/WindowsPowerShell/v1.0/powershell.exe"
-    script: "C:/tools/browserselector/edge.ps1"
+    script: "C:/tools/browserselector/edge.ps1" # see scripts folder
   firefox:
     exe: "C:/Program Files/Mozilla Firefox/firefox.exe"
 
@@ -32,7 +32,7 @@ domain:
      regex: ".*"        # regex to match domain
      priority: 999      # priority - rules will be evaluated from lowest to highest
    - browser: "edge"
-     regex: ".*\\.corpintra\\.net"
+     regex: ".*\\.intra\\.net"
      priority: 100
    - browser: "firefox"
      regex: ""
@@ -50,8 +50,3 @@ The attached Registry file can be used to configure the tool as the default brow
 [HKEY_CURRENT_USER\Software\Classes\BrowserselectorURL\shell\open\command]
 @="\"C:\\tools\\browserselector\\browserselector.exe\" -- \"%1\""
 ```
-
-For Windows 10 the configuration changed. New .reg file is still work in progress. If you want to figure it out yourself the way Firefox registers itself seems to be documented here:
-
-`https://github.com/mozilla/gecko-dev/blob/master/browser/installer/windows/nsis/shared.nsh#L1456`
-
