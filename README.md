@@ -25,7 +25,7 @@ browser: # define possible browsers
     exec: "C:/Windows/System32/WindowsPowerShell/v1.0/powershell.exe"
     script: "C:/tools/browserselector/edge.ps1" # see scripts folder
   firefox:
-    exe: "C:/Program Files/Mozilla Firefox/firefox.exe"
+    exec: "C:/Program Files/Mozilla Firefox/firefox.exe"
 
 domain:
    - browser: "firefox" # name of browser
