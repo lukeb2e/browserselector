@@ -3,6 +3,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"os/exec"
@@ -13,23 +14,6 @@ import (
 	"github.com/spf13/viper"
 )
 
-type configuration struct {
-	Domain  []domain
-	Browser map[string]*browser
-	Debug   bool
-}
-
-type domain struct {
-	Browser  string
-	Regex    string
-	Priority uint
-}
-
-type browser struct {
-	Exec   string
-	Script string
-}
-
 func debug(debug bool, a ...interface{}) (n int, err error) {
 	if !debug {
 		return
@@ -38,11 +22,83 @@ func debug(debug bool, a ...interface{}) (n int, err error) {
 	//return fmt.Fprintln(os.Stdout, append([]interface{}{"[Debug]"}, a...))
 }
 
+func getBinaryDirectory(args []string) (dir string, err error) {
+	if len(args) < 1 {
+		err = errors.New("too few arguments")
+		return
+	}
+
+	dir, err = filepath.Abs(filepath.Dir(args[0]))
+	return dir, err
+}
+
+func sortConfigBrowserPriority(input []domain) (output []domain, err error) {
+	sort.Slice(input[:], func(i, j int) bool {
+		return input[i].Priority < input[j].Priority
+	})
+	output = input
+	return
+}
+
+func getUrl(args []string, config configuration) (url string, err error) {
+	debug(config.Debug, "Arguments:", args)
+
+	if len(args) < 1 {
+		err = errors.New("missing parameters")
+		return
+	}
+
+	for index, element := range args {
+		debug(config.Debug, "Element:", index, element)
+		start, err := regexp.Compile("(http|https|ftp|ftps|ftpes).*")
+		if err != nil {
+			fmt.Println(err)
+			fmt.Scanln()
+			os.Exit(1)
+		}
+		if start.MatchString(element) {
+			url = args[index]
+			break
+		}
+	}
+
+	if url == "" {
+		err = errors.New("no url found")
+		return
+	}
+
+	debug(config.Debug, "URL: ", url)
+	return
+}
+
+func getFqdnFromUrl(url string, config configuration) (protocol string, fqdn string, err error) {
+	// Regex match FQDN
+	// https?:\/\/([^\/]*)\/?.*
+	r, err := regexp.Compile("(http|https|ftp|ftps|ftpes)://([^/]*)/?.*")
+	if err != nil {
+		return
+	}
+	matches := r.FindStringSubmatch(url)
+
+	debug(config.Debug, "Matches: ", matches)
+
+	if len(matches) < 3 {
+		err = errors.New("invalid url: " + url)
+		return
+	}
+
+	protocol = matches[1]
+	fqdn = matches[2]
+
+	debug(config.Debug, "Protocol: ", protocol, " | FQDN: ", fqdn)
+	return
+}
+
 func main() {
-	// Get location of running binary
-	dir, err := filepath.Abs(filepath.Dir(os.Args[0]))
+	dir, err := getBinaryDirectory(os.Args)
 	if err != nil {
 		fmt.Println(err)
+		fmt.Scanln()
 		return
 	}
 
@@ -54,57 +110,37 @@ func main() {
 	err = viper.ReadInConfig()
 	if err != nil {
 		fmt.Println(err)
+		fmt.Scanln()
 		return
 	}
 	err = viper.Unmarshal(&config)
 	if err != nil {
 		fmt.Println(err)
+		fmt.Scanln()
 		return
 	}
 
-	// Sort browser by priority
-	sort.Slice(config.Domain[:], func(i, j int) bool {
-		return config.Domain[i].Priority < config.Domain[j].Priority
-	})
-
-	// Get OS Arguments
-	args := os.Args
-	debug(config.Debug, "Arguments:", args)
-
-	var uri string
-	if len(args) > 1 {
-		for index, element := range args {
-			debug(config.Debug, "Element:", index, element)
-			start, err := regexp.Compile("(http|https|ftp|ftps|ftpes).*")
-			if err != nil {
-				fmt.Println(err)
-				fmt.Scanln()
-				os.Exit(1)
-			}
-			if start.MatchString(element) {
-				uri = args[index]
-				break
-			}
-		}
-	}
-
-	if uri == "" {
-		fmt.Println("Missing URL")
-		os.Exit(1)
-	}
-
-	debug(config.Debug, "URI: ", uri)
-
-	// Regex match FQDN
-	// https?:\/\/([^\/]*)\/?.*
-	r, err := regexp.Compile("(http|https|ftp|ftps|ftpes)://([^/]*)/?.*")
+	config.Domain, err = sortConfigBrowserPriority(config.Domain)
 	if err != nil {
 		fmt.Println(err)
 		fmt.Scanln()
-		os.Exit(1)
+		return
 	}
-	fqdn := r.FindStringSubmatch(uri)[2]
-	debug(config.Debug, "FQDN: ", fqdn)
+
+	// Get url from arguments
+	url, err := getUrl(os.Args, config)
+	if err != nil {
+		fmt.Println(err)
+		fmt.Scanln()
+		return
+	}
+
+	_, fqdn, err := getFqdnFromUrl(url, config)
+	if err != nil {
+		fmt.Println(err)
+		fmt.Scanln()
+		return
+	}
 
 	// iterate over config
 	selector := len(config.Domain) - 1
@@ -129,11 +165,11 @@ func main() {
 	var cmdArgs []string
 	if config.Browser[config.Domain[selector].Browser].Script == "" {
 		// Exe + "FQDN"
-		//cmdArgs = append(cmdArgs, "\""+uri+"\"")
-		cmdArgs = append(cmdArgs, uri)
+		//cmdArgs = append(cmdArgs, "\""+url+"\"")
+		cmdArgs = append(cmdArgs, url)
 	} else {
 		// Exe + Script + "FQDN"
-		cmdArgs = append(cmdArgs, config.Browser[config.Domain[selector].Browser].Script, "\""+uri+"\"")
+		cmdArgs = append(cmdArgs, config.Browser[config.Domain[selector].Browser].Script, "\""+url+"\"")
 	}
 
 	fmt.Println(command, cmdArgs)
