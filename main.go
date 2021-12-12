@@ -14,7 +14,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-func debug(debug bool, a ...interface{}) (n int, err error) {
+func debugOutput(debug bool, a ...interface{}) (n int, err error) {
 	if !debug {
 		return
 	}
@@ -41,7 +41,7 @@ func sortConfigBrowserPriority(input []domain) (output []domain, err error) {
 }
 
 func getUrl(args []string, config configuration) (url string, err error) {
-	debug(config.Debug, "Arguments:", args)
+	debugOutput(config.Debug, "Arguments:", args)
 
 	if len(args) < 1 {
 		err = errors.New("missing parameters")
@@ -49,7 +49,7 @@ func getUrl(args []string, config configuration) (url string, err error) {
 	}
 
 	for index, element := range args {
-		debug(config.Debug, "Element:", index, element)
+		debugOutput(config.Debug, "Element:", index, element)
 		start, err := regexp.Compile("(http|https|ftp|ftps|ftpes|file).*")
 		if err != nil {
 			fmt.Println(err)
@@ -67,7 +67,7 @@ func getUrl(args []string, config configuration) (url string, err error) {
 		return
 	}
 
-	debug(config.Debug, "URL: ", url)
+	debugOutput(config.Debug, "URL: ", url)
 	return
 }
 
@@ -80,7 +80,7 @@ func getFqdnFromUrl(url string, config configuration) (protocol string, fqdn str
 	}
 	matches := r.FindStringSubmatch(url)
 
-	debug(config.Debug, "Matches: ", matches)
+	debugOutput(config.Debug, "Matches: ", matches)
 
 	if len(matches) < 3 {
 		err = errors.New("invalid url: " + url)
@@ -90,7 +90,7 @@ func getFqdnFromUrl(url string, config configuration) (protocol string, fqdn str
 	protocol = matches[1]
 	fqdn = matches[2]
 
-	debug(config.Debug, "Protocol: ", protocol, " | FQDN: ", fqdn)
+	debugOutput(config.Debug, "Protocol: ", protocol, " | FQDN: ", fqdn)
 	return
 }
 
@@ -148,7 +148,7 @@ func main() {
 		match, _ := regexp.MatchString(element.Regex, fqdn)
 		if match {
 			selector = index
-			debug(config.Debug, "Match found", element.Browser, "Priority:", element.Priority, "Regex:", element.Regex)
+			debugOutput(config.Debug, "Match found", element.Browser, "Priority:", element.Priority, "Regex:", element.Regex)
 			break
 		}
 	}
@@ -172,7 +172,7 @@ func main() {
 		cmdArgs = append(cmdArgs, config.Browser[config.Domain[selector].Browser].Script, "\""+url+"\"")
 	}
 
-	debug(config.Debug, command, cmdArgs)
+	debugOutput(config.Debug, command, cmdArgs)
 	cmd := exec.Command(command, cmdArgs...)
 	err = cmd.Start()
 	if err != nil {

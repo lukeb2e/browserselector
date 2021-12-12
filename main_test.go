@@ -110,7 +110,7 @@ func Test_sortConfigBrowserPriority(t *testing.T) {
 	}
 }
 
-func Test_debug(t *testing.T) {
+func Test_debugOutput(t *testing.T) {
 	type args struct {
 		debug bool
 		a     []interface{}
@@ -139,16 +139,16 @@ func Test_debug(t *testing.T) {
 			wantErr: false,
 		},
 	}
-	
+
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			gotN, err := debug(tt.args.debug, tt.args.a...)
+			gotN, err := debugOutput(tt.args.debug, tt.args.a...)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("debug() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("debugOutput() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if gotN != tt.wantN {
-				t.Errorf("debug() = %v, want %v", gotN, tt.wantN)
+				t.Errorf("debugOutput() = %v, want %v", gotN, tt.wantN)
 			}
 		})
 	}
