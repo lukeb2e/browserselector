@@ -50,7 +50,7 @@ func getUrl(args []string, config configuration) (url string, err error) {
 
 	for index, element := range args {
 		debug(config.Debug, "Element:", index, element)
-		start, err := regexp.Compile("(http|https|ftp|ftps|ftpes).*")
+		start, err := regexp.Compile("(http|https|ftp|ftps|ftpes|file).*")
 		if err != nil {
 			fmt.Println(err)
 			fmt.Scanln()
@@ -142,7 +142,7 @@ func main() {
 		return
 	}
 
-	// iterate over config
+	// Check rules to select browser
 	selector := len(config.Domain) - 1
 	for index, element := range config.Domain {
 		match, _ := regexp.MatchString(element.Regex, fqdn)
@@ -172,7 +172,7 @@ func main() {
 		cmdArgs = append(cmdArgs, config.Browser[config.Domain[selector].Browser].Script, "\""+url+"\"")
 	}
 
-	fmt.Println(command, cmdArgs)
+	debug(config.Debug, command, cmdArgs)
 	cmd := exec.Command(command, cmdArgs...)
 	err = cmd.Start()
 	if err != nil {
@@ -181,6 +181,7 @@ func main() {
 		os.Exit(1)
 	}
 
+	// Stop execution to show debug output
 	if config.Debug {
 		fmt.Println()
 		fmt.Scanln()

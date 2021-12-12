@@ -139,6 +139,7 @@ func Test_debug(t *testing.T) {
 			wantErr: false,
 		},
 	}
+	
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			gotN, err := debug(tt.args.debug, tt.args.a...)
@@ -202,6 +203,18 @@ func Test_getUrl(t *testing.T) {
 			name:    "url with spaces",
 			args:    args{args: []string{"http://a.b/path with spaces/"}, config: defaultConfig},
 			wantUrl: "http://a.b/path with spaces/",
+			wantErr: false,
+		},
+		{
+			name:    "file url",
+			args:    args{args: []string{"file:///A:/b/file.pdf"}, config: defaultConfig},
+			wantUrl: "file:///A:/b/file.pdf",
+			wantErr: false,
+		},
+		{
+			name:    "file url with spaces",
+			args:    args{args: []string{"file:///A:/b/file with spaces.pdf"}, config: defaultConfig},
+			wantUrl: "file:///A:/b/file with spaces.pdf",
 			wantErr: false,
 		},
 	}
