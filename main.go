@@ -155,8 +155,10 @@ func main() {
 
 	// Check if browser exists
 	if _, ok := config.Browser[config.Domain[selector].Browser]; !ok {
-		fmt.Println("Browser not found in configuration")
-		fmt.Scanln()
+		if config.Debug {
+			fmt.Println("Browser not found in configuration:", config.Domain[selector].Browser)
+			fmt.Scanln()
+		}
 		os.Exit(1)
 	}
 
